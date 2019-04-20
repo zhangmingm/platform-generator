@@ -61,10 +61,7 @@ public class TableInfo {
     }
 
     protected TableInfo setConvert(StrategyConfig strategyConfig) {
-        if (strategyConfig.containsTablePrefix(name)) {
-            // 包含前缀
-            this.convert = true;
-        } else if (strategyConfig.isCapitalModeNaming(name)) {
+            if (strategyConfig.isCapitalModeNaming(name)) {
             // 包含
             this.convert = false;
         } else {

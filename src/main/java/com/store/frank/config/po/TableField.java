@@ -15,7 +15,6 @@
  */
 package com.store.frank.config.po;
 
-import com.store.frank.config.base.StrategyConfig;
 import com.store.frank.config.rule.IColumnType;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -32,12 +31,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class TableField {
 
-//    private boolean convert;
-//    private boolean keyFlag;
-    /**
-     * 主键是否为自增类型
-     */
-//    private boolean keyIdentityFlag;
 
 
     private String name; // 字段名称
@@ -53,7 +46,7 @@ public class TableField {
     private Map<String, Object> customMap;
 
 
-    public TableField setPropertyName(StrategyConfig strategyConfig, String propertyName) {
+    public TableField setPropertyName(String propertyName) {
         this.propertyName = propertyName;
         return this;
     }

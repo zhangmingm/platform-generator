@@ -15,9 +15,7 @@
  */
 package com.store.frank.engine;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.store.frank.config.base.ConfigBuilder;
 import com.store.frank.config.base.DataSourceConfig;
@@ -89,14 +87,6 @@ public class AutoGenerator {
             if (tableInfo.isConvert()) {
                 // 表注解
                 tableInfo.setImportPackages(TableName.class.getCanonicalName());
-            }
-            if (config.getStrategyConfig().getLogicDeleteFieldName() != null) {
-                // 逻辑删除注解
-                tableInfo.setImportPackages(TableLogic.class.getCanonicalName());
-            }
-            if (StringUtils.isNotEmpty(config.getStrategyConfig().getVersionFieldName())) {
-                // 乐观锁注解
-                tableInfo.setImportPackages(Version.class.getCanonicalName());
             }
             boolean importSerializable = true;
             if (StringUtils.isNotEmpty(config.getSuperEntityClass())) {

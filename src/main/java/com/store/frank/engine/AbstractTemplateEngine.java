@@ -167,17 +167,10 @@ public abstract class AbstractTemplateEngine {
     public Map<String, Object> getObjectMap(TableInfo tableInfo) {
         Map<String, Object> objectMap = new HashMap<>(30);
         ConfigBuilder config = getConfigBuilder();
-        if (config.getStrategyConfig().isControllerMappingHyphenStyle()) {
-            objectMap.put("controllerMappingHyphenStyle", config.getStrategyConfig().isControllerMappingHyphenStyle());
-            objectMap.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
-        }
-        objectMap.put("restControllerStyle", config.getStrategyConfig().isRestControllerStyle());
         objectMap.put("config", config);
         objectMap.put("package", config.getPackageInfo());
         GlobalConfig globalConfig = config.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
-        objectMap.put("logicDeleteFieldName", config.getStrategyConfig().getLogicDeleteFieldName());
-        objectMap.put("versionFieldName", config.getStrategyConfig().getVersionFieldName());
         objectMap.put("swagger2", globalConfig.isSwagger2());
         objectMap.put("date", new SimpleDateFormat("yyyy-MM-dd hh:MM:ss").format(new Date()));
         objectMap.put("table", tableInfo);
@@ -188,8 +181,6 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("entity", tableInfo.getEntityName());
         objectMap.put("entityInstanceName", StringTools.getInstanceName(tableInfo.getEntityName())); // 实体实例化名称 首字母小写
         objectMap.put("entitySerialVersionUID", config.getStrategyConfig().isEntitySerialVersionUID());
-        objectMap.put("entityColumnConstant", config.getStrategyConfig().isEntityColumnConstant());
-        objectMap.put("entityBuilderModel", config.getStrategyConfig().isEntityBuilderModel());
         objectMap.put("entityLombokModel", config.getStrategyConfig().isEntityLombokModel());
         objectMap.put("superEntityClass", getSuperClassName(config.getSuperEntityClass()));
         objectMap.put("superMapperClassPackage", config.getSuperMapperClass());
@@ -198,8 +189,8 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("superServiceClass", getSuperClassName(config.getSuperServiceClass()));
         objectMap.put("superServiceImplClassPackage", config.getSuperServiceImplClass());
         objectMap.put("superServiceImplClass", getSuperClassName(config.getSuperServiceImplClass()));
-        objectMap.put("superControllerClassPackage", config.getSuperControllerClass());
-        objectMap.put("superControllerClass", getSuperClassName(config.getSuperControllerClass()));
+//        objectMap.put("superControllerClassPackage", config.getSuperControllerClass());
+//        objectMap.put("superControllerClass", getSuperClassName(config.getSuperControllerClass()));
         return objectMap;
     }
 

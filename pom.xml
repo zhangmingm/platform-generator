@@ -97,25 +97,13 @@
         </dependency>
 
         <dependency>
-            <groupId>cn.sstech.framework</groupId>
-            <artifactId>sstech-unify-return</artifactId>
-            <version>${sstech-ftamework-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.sstech.framework</groupId>
-            <artifactId>sstech-helper</artifactId>
-            <version>${sstech-ftamework-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.sstech.framework</groupId>
-            <artifactId>sstech-user-token</artifactId>
-            <version>${sstech-ftamework-version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
     </dependencies>
 

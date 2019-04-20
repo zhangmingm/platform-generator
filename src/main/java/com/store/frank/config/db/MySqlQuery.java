@@ -33,8 +33,8 @@ public class MySqlQuery implements IDbQuery{
 
 
     @Override
-    public String tablesSql() {
-        return "show table status";
+    public String tablesSql(String tabeName) {
+        return "show table status where name='"+tabeName+"'";
     }
 
 

@@ -1,43 +1,20 @@
-/*
- * Copyright (c) 2011-2019, hubin (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.store.frank.config.base;
 
-import cn.sstech.framework.helper.util.StringUtil;
-import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.core.toolkit.TableInfoHelper;
 import com.store.frank.config.po.TableFill;
 import com.store.frank.config.rule.NamingStrategy;
 import com.store.frank.utils.ConstVal;
 import com.store.frank.utils.PropertiesUtils;
-import com.store.frank.utils.StringTools;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * 策略配置项
- *
  * @author YangHu, tangguo, hubin
  * @since 2016/8/30
  */
@@ -49,6 +26,9 @@ public class StrategyConfig {
      * 是否大写命名
      */
     private boolean isCapitalMode = false;
+//   表名称
+    private String tableName;
+
     /**
      * 数据库表映射到实体的命名策略
      */
@@ -58,16 +38,6 @@ public class StrategyConfig {
      * <p>未指定按照 naming 执行</p>
      */
     private NamingStrategy columnNaming = NamingStrategy.underline_to_camel;
-    /**
-     * 表前缀
-     */
-    @Setter(AccessLevel.NONE)
-    private String[] tablePrefix;
-    /**
-     * 字段前缀
-     */
-    @Setter(AccessLevel.NONE)
-    private String[] fieldPrefix;
     /**
      * 自定义继承的Entity类全称，带包名
      */
@@ -90,65 +60,16 @@ public class StrategyConfig {
      * 自定义继承的ServiceImpl类全称，带包名
      */
     private String superServiceImplClass = ConstVal.SUPER_SERVICE_IMPL_CLASS;
-    /**
-     * 自定义继承的Controller类全称，带包名
-     */
-    private String superControllerClass;
-    /**
-     * 需要包含的表名，允许正则表达式（与exclude二选一配置）
-     */
-    @Setter(AccessLevel.NONE)
-    private String[] include = null;
+
     /**
      * 实体是否生成 serialVersionUID
      */
     private boolean entitySerialVersionUID = true;
     /**
-     * 【实体】是否生成字段常量（默认 false）<br>
-     * -----------------------------------<br>
-     * public static final String ID = "test_id";
-     */
-    private boolean entityColumnConstant = false;
-    /**
-     * 【实体】是否为构建者模型（默认 false）<br>
-     * -----------------------------------<br>
-     * public User setName(String name) { this.name = name; return this; }
-     */
-    private boolean entityBuilderModel = false;
-    /**
      * 【实体】是否为lombok模型（默认 false）<br>
      * <a href="https://projectlombok.org/">document</a>
      */
     private boolean entityLombokModel = true;
-
-
-
-    /**
-     * 生成 <code>@RestController</code> 控制器
-     * <pre>
-     *      <code>@Controller</code> -> <code>@RestController</code>
-     * </pre>
-     */
-    private boolean restControllerStyle = false;
-    /**
-     * 驼峰转连字符
-     * <pre>
-     *      <code>@RequestMapping("/managerUserActionHistory")</code> -> <code>@RequestMapping("/manager-user-action-history")</code>
-     * </pre>
-     */
-    private boolean controllerMappingHyphenStyle = false;
-    /**
-     * 是否生成实体时，生成字段注解
-     */
-    private boolean entityTableFieldAnnotationEnable = false;
-    /**
-     * 乐观锁属性名称
-     */
-    private String versionFieldName;
-    /**
-     * 逻辑删除属性名称
-     */
-    private String logicDeleteFieldName;
     /**
      * 表填充字段
      */
@@ -163,24 +84,6 @@ public class StrategyConfig {
         return isCapitalMode && StringUtils.isCapitalMode(word);
     }
 
-    /**
-     * 表名称包含指定前缀
-     *
-     * @param tableName 表名称
-     */
-    public boolean containsTablePrefix(String tableName) {
-        if (null != tableName) {
-            String[] tps = getTablePrefix();
-            if (null != tps) {
-                for (String tp : tps) {
-                    if (tableName.contains(tp)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
     public NamingStrategy getColumnNaming() {
         if (null == columnNaming) {
@@ -188,11 +91,6 @@ public class StrategyConfig {
             return naming;
         }
         return columnNaming;
-    }
-
-    public StrategyConfig setTablePrefix(String... tablePrefix) {
-        this.tablePrefix = tablePrefix;
-        return this;
     }
 
     public boolean includeSuperEntityColumns(String fieldName) {
@@ -206,95 +104,9 @@ public class StrategyConfig {
         return false;
     }
 
-    public StrategyConfig setSuperEntityColumns(String... superEntityColumns) {
-        this.superEntityColumns = superEntityColumns;
-        return this;
-    }
-
-    public StrategyConfig setInclude(String... include) {
-        this.include = include;
-        return this;
-    }
-
-    public StrategyConfig setFieldPrefix(String... fieldPrefixs) {
-        this.fieldPrefix = fieldPrefixs;
-        return this;
-    }
-
-    public StrategyConfig setSuperEntityClass(String superEntityClass) {
-        this.superEntityClass = superEntityClass;
-        return this;
-    }
 
 
-    /**
-     * <p>
-     * 设置实体父类，该设置自动识别公共字段<br/>
-     * 属性 superEntityColumns 改配置无需再次配置
-     * </p>
-     * <p>
-     * 注意！！字段策略要在设置实体父类之前有效
-     * </p>
-     *
-     * @param clazz 实体父类 Class
-     * @return
-     */
-    public StrategyConfig setSuperEntityClass(Class<?> clazz) {
-        return setSuperEntityClass(clazz, null);
-    }
 
-    /**
-     * <p>
-     * 设置实体父类，该设置自动识别公共字段<br/>
-     * 属性 superEntityColumns 改配置无需再次配置
-     * </p>
-     *
-     * @param clazz        实体父类 Class
-     * @param columnNaming 字段命名策略
-     * @return
-     */
-    public StrategyConfig setSuperEntityClass(Class<?> clazz, NamingStrategy columnNaming) {
-        if (null != columnNaming) {
-            this.columnNaming = columnNaming;
-        }
-        String pkg = ClassUtils.getPackageName(clazz);
-        if (StringUtils.isNotEmpty(pkg)) {
-            pkg += "." + clazz.getSimpleName();
-        } else {
-            pkg = clazz.getSimpleName();
-        }
-        this.superEntityClass = pkg;
-        convertSuperEntityColumns(clazz);
-        return this;
-    }
-
-    /**
-     * <p>
-     * 父类 Class 反射属性转换为公共字段
-     * </p>
-     *
-     * @param clazz 实体父类 Class
-     */
-    protected void convertSuperEntityColumns(Class<?> clazz) {
-        List<Field> fields = TableInfoHelper.getAllFields(clazz);
-        if (CollectionUtils.isNotEmpty(fields)) {
-            this.superEntityColumns = fields.stream().map(field -> {
-                if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
-                    return field.getName();
-                }
-                return StringUtils.camelToUnderline(field.getName());
-            }).collect(Collectors.toSet()).stream().toArray(String[]::new);
-        }
-    }
-
-    /**
-     * @deprecated please use `setEntityTableFieldAnnotationEnable`
-     */
-    @Deprecated
-    public StrategyConfig entityTableFieldAnnotationEnable(boolean isEnableAnnotation) {
-        entityTableFieldAnnotationEnable = isEnableAnnotation;
-        return this;
-    }
 
     public StrategyConfig() {
         Properties properties=PropertiesUtils.getProperties();
@@ -302,16 +114,13 @@ public class StrategyConfig {
         String tableName= (String) properties.get("tableName");
         String superColumns= (String) properties.get("superColumns");
         this.superEntityClass=baseEntity;
-        this.include=new String[]{tableName};
-        if(StringUtil.isNotEmpty(superColumns)){
+        if(null != superColumns && !"".equals(superColumns)){
             String[] temp=superColumns.split(",");
             this.superEntityColumns=temp;
         }else{
             this.superEntityColumns=null;
         }
-        this.controllerMappingHyphenStyle=true;
-        String modelName = StringTools.dbField2LowerCamel(tableName);
-        this.tablePrefix=new String[]{modelName+ "_"};
+        this.tableName=tableName;
     }
 
 }

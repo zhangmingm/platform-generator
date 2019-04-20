@@ -18,7 +18,7 @@ public interface IDbQuery {
     /**
      * 表信息查询 SQL
      */
-    String tablesSql();
+    String tablesSql(String tabeName);
 
 
     /**
