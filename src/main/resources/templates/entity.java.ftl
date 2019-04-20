@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 * @Description: ${table.comment!} 实体对象
 */
 @Data
-@Accessors(chain = true)
 @ApiModel(value="${entity}对象", description="${table.comment!}")
 public class ${entity}<#-- extends ${superEntityClass}-->{
 
