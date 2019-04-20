@@ -16,9 +16,6 @@
 package com.store.frank.config.po;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.store.frank.config.base.StrategyConfig;
-import com.store.frank.config.rule.NamingStrategy;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -37,7 +34,6 @@ import java.util.Set;
 public class TableInfo {
 
     private final Set<String> importPackages = new HashSet<>();
-    private boolean convert;
     private String name; // 表字段
     private String comment; // 注释
     private String entityName; // 实体名称
@@ -55,36 +51,13 @@ public class TableInfo {
 
     private String fieldNames;
 
-    public TableInfo setConvert(boolean convert) {
-        this.convert = convert;
-        return this;
-    }
-
-    protected TableInfo setConvert(StrategyConfig strategyConfig) {
-            if (strategyConfig.isCapitalModeNaming(name)) {
-            // 包含
-            this.convert = false;
-        } else {
-            // 转换字段
-            if (NamingStrategy.underline_to_camel == strategyConfig.getColumnNaming()) {
-                // 包含大写处理
-                if (StringUtils.containsUpperCase(name)) {
-                    this.convert = true;
-                }
-            } else if (!entityName.equalsIgnoreCase(name)) {
-                this.convert = true;
-            }
-        }
-        return this;
-    }
 
     public String getEntityPath() {
         return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
     }
 
-    public TableInfo setEntityName(StrategyConfig strategyConfig, String entityName) {
+    public TableInfo setEntityName(String entityName) {
         this.entityName = entityName;
-        this.setConvert(strategyConfig);
         return this;
     }
 

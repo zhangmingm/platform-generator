@@ -1,6 +1,5 @@
 package com.store.frank.config.base;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.store.frank.config.po.TableFill;
 import com.store.frank.config.rule.NamingStrategy;
 import com.store.frank.utils.ConstVal;
@@ -75,23 +74,6 @@ public class StrategyConfig {
      */
     private List<TableFill> tableFillList = null;
 
-    /**
-     * 大写命名、字段符合大写字母数字下划线命名
-     *
-     * @param word 待判断字符串
-     */
-    public boolean isCapitalModeNaming(String word) {
-        return isCapitalMode && StringUtils.isCapitalMode(word);
-    }
-
-
-    public NamingStrategy getColumnNaming() {
-        if (null == columnNaming) {
-            // 未指定以 naming 策略为准
-            return naming;
-        }
-        return columnNaming;
-    }
 
     public boolean includeSuperEntityColumns(String fieldName) {
         if (null != superEntityColumns) {
