@@ -19,8 +19,6 @@ import com.store.frank.config.rule.IColumnType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.Map;
-
 /**
  * 表字段信息
  *
@@ -31,8 +29,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class TableField {
 
-
-
     private String name; // 字段名称
     private String type; // 字段类型
     private String propertyName;  // java 属性
@@ -40,16 +36,7 @@ public class TableField {
     private String comment; // 字段注释
 
     private String fill;
-    /**
-     * 自定义查询字段列表
-     */
-    private Map<String, Object> customMap;
 
-
-    public TableField setPropertyName(String propertyName) {
-        this.propertyName = propertyName;
-        return this;
-    }
 
     public String getPropertyType() {
         if (null != columnType) {

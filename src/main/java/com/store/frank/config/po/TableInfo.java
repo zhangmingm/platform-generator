@@ -52,15 +52,6 @@ public class TableInfo {
     private String fieldNames;
 
 
-    public String getEntityPath() {
-        return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-    }
-
-    public TableInfo setEntityName(String entityName) {
-        this.entityName = entityName;
-        return this;
-    }
-
     public TableInfo setFields(List<TableField> fields) {
         if (CollectionUtils.isNotEmpty(fields)) {
             this.fields = fields;

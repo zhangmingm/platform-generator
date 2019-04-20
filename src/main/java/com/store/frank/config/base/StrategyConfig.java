@@ -25,6 +25,7 @@ public class StrategyConfig {
      * 是否大写命名
      */
     private boolean isCapitalMode = false;
+
 //   表名称
     private String tableName;
 
