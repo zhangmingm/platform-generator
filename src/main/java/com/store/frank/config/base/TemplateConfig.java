@@ -26,7 +26,6 @@ import lombok.experimental.Accessors;
  * @since 2017-06-17
  */
 @Data
-@Accessors(chain = true)
 public class TemplateConfig {
 
     private String entity = ConstVal.TEMPLATE_ENTITY_JAVA;

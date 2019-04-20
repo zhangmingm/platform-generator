@@ -17,7 +17,6 @@ package com.store.frank.config.base;
 
 import com.store.frank.config.po.TableInfo;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 输出文件配置
@@ -26,7 +25,6 @@ import lombok.experimental.Accessors;
  * @since 2017-01-18
  */
 @Data
-@Accessors(chain = true)
 public abstract class FileOutConfig {
 
     /**

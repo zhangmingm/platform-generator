@@ -7,7 +7,6 @@ import com.store.frank.utils.PropertiesUtils;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Properties;
@@ -18,7 +17,6 @@ import java.util.Properties;
  * @since 2016/8/30
  */
 @Data
-@Accessors(chain = true)
 public class StrategyConfig {
 
     /**

@@ -20,9 +20,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.store.frank.config.db.IDbQuery;
 import com.store.frank.config.po.TableField;
 import com.store.frank.config.po.TableInfo;
-import com.store.frank.config.rule.NamingStrategy;
 import com.store.frank.utils.ConstVal;
 import com.store.frank.utils.StringTools;
+import lombok.Data;
 
 import java.io.File;
 import java.sql.Connection;
@@ -31,10 +31,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -42,6 +40,7 @@ import java.util.Set;
  * @author YangHu, tangguo, hubin
  * @since 2016-08-30
  */
+@Data
 public class ConfigBuilder {
 
     /**
@@ -70,6 +69,7 @@ public class ConfigBuilder {
     /**
      * 数据库表信息
      */
+    private TableInfo tableInfo;
     private List<TableInfo> tableInfoList;
     /**
      * 包配置详情
@@ -175,21 +175,6 @@ public class ConfigBuilder {
 
 
     /**
-     * 表信息
-     *
-     * @return 所有表信息
-     */
-    public List<TableInfo> getTableInfoList() {
-        return tableInfoList;
-    }
-
-    public ConfigBuilder setTableInfoList(List<TableInfo> tableInfoList) {
-        this.tableInfoList = tableInfoList;
-        return this;
-    }
-
-
-    /**
      * 模板路径配置信息
      *
      * @return 所以模板路径配置信息
@@ -258,7 +243,7 @@ public class ConfigBuilder {
      */
     private void handlerStrategy(StrategyConfig config) {
         processTypes(config);
-        tableInfoList = getTablesInfo(config);
+        tableInfo = getTablesInfo(config);
     }
 
 
@@ -290,13 +275,10 @@ public class ConfigBuilder {
     /**
      * 处理表对应的类名称
      *
-     * @param tableList 表名称
-     * @param strategy  命名策略
-     * @param config    策略配置项
+//     * @param tableList 表名称
      * @return 补充完整信息后的表
      */
-    private List<TableInfo> processTable(List<TableInfo> tableList, NamingStrategy strategy, StrategyConfig config) {
-        for (TableInfo tableInfo : tableList) {
+    private TableInfo processTable(TableInfo tableInfo) {
             String entityName = tableInfo.getEntityName(); // NamingStrategy.capitalFirst(tableInfo.getName());
             tableInfo.setMapperName(entityName + ConstVal.MAPPER);
             tableInfo.setXmlName(entityName + ConstVal.MAPPER);
@@ -305,8 +287,7 @@ public class ConfigBuilder {
             tableInfo.setControllerName(entityName + ConstVal.CONTROLLER);
             // 检测导入包
             checkImportPackages(tableInfo);
-        }
-        return tableList;
+        return tableInfo;
     }
 
     /**
@@ -325,71 +306,41 @@ public class ConfigBuilder {
     /**
      * 获取所有的数据库表信息
      */
-    private List<TableInfo> getTablesInfo(StrategyConfig config) {
-        //所有的表信息
-        List<TableInfo> tableList = new ArrayList<>();
-
-        //需要反向生成或排除的表信息
-        List<TableInfo> includeTableList = new ArrayList<>();
+    private TableInfo getTablesInfo(StrategyConfig config) {
         String tableName=config.getTableName();
-        //不存在的表名
-        Set<String> notExistTables = new HashSet<>();
+        TableInfo tableInfo=new TableInfo();
         try {
             String tablesSql = dbQuery.tablesSql(tableName);
-            TableInfo tableInfo;
             try (PreparedStatement preparedStatement = connection.prepareStatement(tablesSql);
                  ResultSet results = preparedStatement.executeQuery()) {
                 while (results.next()) {
                     if (StringUtils.isNotEmpty(tableName)) {
                         String tableComment = results.getString(dbQuery.tableComment());
-                        tableInfo = new TableInfo();
                         tableInfo.setName(tableName);
                         tableInfo.setEntityName(StringTools.dbField2UpperCamel(tableName));
                         tableInfo.setComment(tableComment);
-                        includeTableList.add(tableInfo);
-                        tableList.add(tableInfo);
                     } else {
                         System.err.println("当前数据库为空！！！");
                     }
                 }
             }
-            // 将已经存在的表移除，获取配置中数据库不存在的表
-            for (TableInfo tabInfo : tableList) {
-                notExistTables.remove(tabInfo.getName());
-            }
-            if (notExistTables.size() > 0) {
-                System.err.println("表 " + notExistTables + " 在数据库中不存在！！！");
-            }
+            convertTableFields(tableInfo);
 
-            // 性能优化，只处理需执行表字段 github issues/219
-            includeTableList.forEach(ti -> convertTableFields(ti, config.getColumnNaming()));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return processTable(includeTableList, config.getNaming(), config);
+        return processTable(tableInfo);
     }
 
 
-    /**
-     * 表名匹配
-     *
-     * @param setTableName 设置表名
-     * @param dbTableName  数据库表单
-     * @return ignore
-     */
-    private boolean tableNameMatches(String setTableName, String dbTableName) {
-        return setTableName.equals(dbTableName)
-            || StringUtils.matches(setTableName, dbTableName);
-    }
 
     /**
      * 将字段信息与表信息关联
      *
      * @param tableInfo 表信息
-     * @param strategy  命名策略
      * @return ignore
      */
-    private TableInfo convertTableFields(TableInfo tableInfo, NamingStrategy strategy) {
+    private TableInfo convertTableFields(TableInfo tableInfo/*, NamingStrategy strategy*/) {
         List<TableField> fieldList = new ArrayList<>();
         List<TableField> commonFieldList = new ArrayList<>();
         String tableName = tableInfo.getName();
@@ -467,9 +418,9 @@ public class ConfigBuilder {
      *
      * @return 根据策略返回处理后的名称
      */
-    private String processName(String name) {
+    /*private String processName(String name) {
         return name;
-    }
+    }*/
 
 
 

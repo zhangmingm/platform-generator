@@ -32,7 +32,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -66,8 +65,7 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            List<TableInfo> tableInfoList = getConfigBuilder().getTableInfoList();
-            for (TableInfo tableInfo : tableInfoList) {
+            TableInfo tableInfo= getConfigBuilder().getTableInfo();
                 Map<String, Object> objectMap = getObjectMap(tableInfo);
                 Map<String, String> pathInfo = getConfigBuilder().getPathInfo();
                 TemplateConfig template = getConfigBuilder().getTemplate();
@@ -119,7 +117,6 @@ public abstract class AbstractTemplateEngine {
                         writer(objectMap, templateFilePath(template.getController()), controllerFile);
                     }
                 }
-            }
         } catch (Exception e) {
             logger.error("无法创建文件，请检查配置信息！", e);
         }

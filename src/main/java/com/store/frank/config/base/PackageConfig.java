@@ -34,7 +34,6 @@ import java.util.Properties;
  */
 
 @Data
-@Accessors(chain = true)
 public class PackageConfig {
 
     /**

@@ -23,7 +23,6 @@ import com.store.frank.config.db.MySqlQuery;
 import com.store.frank.config.db.MySqlTypeConvert;
 import com.store.frank.utils.PropertiesUtils;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +36,6 @@ import java.util.Properties;
  * @since 2016/8/30
  */
 @Data
-@Accessors(chain = true)
 public class DataSourceConfig {
 
     /**

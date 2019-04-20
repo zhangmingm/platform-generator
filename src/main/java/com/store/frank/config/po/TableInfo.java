@@ -30,7 +30,6 @@ import java.util.Set;
  * @since 2016/8/30
  */
 @Data
-@Accessors(chain = true)
 public class TableInfo {
 
     private final Set<String> importPackages = new HashSet<>();

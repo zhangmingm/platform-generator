@@ -26,7 +26,6 @@ import lombok.experimental.Accessors;
  * @since 2016-12-03
  */
 @Data
-@Accessors(chain = true)
 public class TableField {
 
     private String name; // 字段名称
