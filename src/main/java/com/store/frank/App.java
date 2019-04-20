@@ -1,13 +1,14 @@
 package com.store.frank;
 
+import com.store.frank.engine.AutoGenerator;
+
 /**
- * Hello world!
- *
+ * 生成代码
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+public class App {
+
+    public static void main( String[] args ){
+        AutoGenerator mpg = new AutoGenerator();
+        mpg.execute();
     }
 }
