@@ -41,13 +41,6 @@ public class GlobalConfig {
 
 
     /**
-     * 开启 swagger2 模式
-     */
-    private boolean swagger2 = true;
-
-
-
-    /**
      * 时间类型对应策略
      */
     private DateType dateType = DateType.TIME_PACK;

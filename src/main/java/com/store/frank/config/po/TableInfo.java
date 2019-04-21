@@ -17,7 +17,6 @@ package com.store.frank.config.po;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.util.HashSet;
 import java.util.List;

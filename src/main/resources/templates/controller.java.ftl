@@ -9,8 +9,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import com.github.pagehelper.PageInfo;
-import cn.sstech.framework.common.annontation.ResponseResult;
-import cn.sstech.framework.token.annontation.LoginAuth;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @since ${date}
  * @Description: ${table.comment!} controller
  */
-@ResponseResult
-@LoginAuth
 @RestController
 @Api(description = "${table.comment!}")
 public class ${table.controllerName} {

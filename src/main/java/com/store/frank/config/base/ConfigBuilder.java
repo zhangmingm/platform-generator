@@ -279,7 +279,7 @@ public class ConfigBuilder {
      * @return 补充完整信息后的表
      */
     private TableInfo processTable(TableInfo tableInfo) {
-            String entityName = tableInfo.getEntityName(); // NamingStrategy.capitalFirst(tableInfo.getName());
+            String entityName = tableInfo.getEntityName();
             tableInfo.setMapperName(entityName + ConstVal.MAPPER);
             tableInfo.setXmlName(entityName + ConstVal.MAPPER);
             tableInfo.setServiceName("I" + entityName + ConstVal.SERVICE);
@@ -325,7 +325,6 @@ public class ConfigBuilder {
                 }
             }
             convertTableFields(tableInfo);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -340,7 +339,7 @@ public class ConfigBuilder {
      * @param tableInfo 表信息
      * @return ignore
      */
-    private TableInfo convertTableFields(TableInfo tableInfo/*, NamingStrategy strategy*/) {
+    private TableInfo convertTableFields(TableInfo tableInfo) {
         List<TableField> fieldList = new ArrayList<>();
         List<TableField> commonFieldList = new ArrayList<>();
         String tableName = tableInfo.getName();
@@ -393,7 +392,6 @@ public class ConfigBuilder {
         }
         packageName = packageName.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
         String result=parentDir + packageName;
-//        result=result.replace("\\","//");
         return result;
     }
 
@@ -413,14 +411,6 @@ public class ConfigBuilder {
     }
 
 
-    /**
-     * 处理字段名称
-     *
-     * @return 根据策略返回处理后的名称
-     */
-    /*private String processName(String name) {
-        return name;
-    }*/
 
 
 

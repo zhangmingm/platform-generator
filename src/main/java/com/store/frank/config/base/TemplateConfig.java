@@ -17,7 +17,6 @@ package com.store.frank.config.base;
 
 import com.store.frank.utils.ConstVal;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 模板路径配置项

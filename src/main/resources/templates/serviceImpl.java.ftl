@@ -1,16 +1,13 @@
 package ${package.ServiceImpl};
 
-import ${package.Mapper}.${table.mapperName};
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
-import ${superServiceImplClassPackage};
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import cn.sstech.framework.token.token.helper.LoginTokenHelper;
 
 
 /**
@@ -31,8 +28,6 @@ public class ${table.serviceImplName}  implements ${table.serviceName} {
     * @Description: 新增${entity}对象。
     */
     public int insert${entity}(${entity} ${entityInstanceName}){
-        long userId=LoginTokenHelper.getLoginUserFromRequest().getId();
-        ${entityInstanceName}.setCreateBy(userId);
         return mapper.insert(${entityInstanceName});
     }
 
@@ -42,8 +37,6 @@ public class ${table.serviceImplName}  implements ${table.serviceName} {
     * @Description: 根据SQL新增${entity}对象。
     */
     public int insert${entity}BySql(${entity} ${entityInstanceName}){
-        long userId=LoginTokenHelper.getLoginUserFromRequest().getId();
-        ${entityInstanceName}.setCreateBy(userId);
         return mapper.insert${entity}BySql(${entityInstanceName});
     }
 
@@ -71,8 +64,6 @@ public class ${table.serviceImplName}  implements ${table.serviceName} {
     * @Description: 修改${entity}对象。
     */
     public int update${entity}(${entity} ${entityInstanceName}){
-        long userId=LoginTokenHelper.getLoginUserFromRequest().getId();
-        ${entityInstanceName}.setUpdateBy(userId);
         return mapper.updateById(${entityInstanceName});
     }
 
@@ -82,8 +73,6 @@ public class ${table.serviceImplName}  implements ${table.serviceName} {
     * @Description: 根据SQL修改${entity}对象。
     */
     public int update${entity}BySql(${entity} ${entityInstanceName}){
-        long userId=LoginTokenHelper.getLoginUserFromRequest().getId();
-        ${entityInstanceName}.setUpdateBy(userId);
        return mapper.update${entity}BySql(${entityInstanceName});
     }
 

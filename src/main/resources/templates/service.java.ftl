@@ -71,12 +71,6 @@ public interface ${table.serviceName}{
     */
     public List<${entity}> select${entity}ListBySql(${entity} entity);
 
-    /**
-     * @author zhangmingming  braveheart1115@163.com
-     * @since 2019-04-19 01:04:24
-     * @Description: 分页查询User对象。
-     */
-
 
    /**
     * @author ${author}

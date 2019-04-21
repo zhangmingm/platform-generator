@@ -17,7 +17,6 @@ package com.store.frank.config.po;
 
 import com.store.frank.config.rule.IColumnType;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 表字段信息

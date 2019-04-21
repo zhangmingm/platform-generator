@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.store.frank.utils.PropertiesUtils;
 import com.store.frank.utils.StringTools;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.util.Map;
 import java.util.Properties;

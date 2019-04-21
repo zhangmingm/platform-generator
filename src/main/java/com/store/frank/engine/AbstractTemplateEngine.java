@@ -1,18 +1,3 @@
-/*
- * Copyright (c) 2011-2019, hubin (jobob@qq.com).
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * <p>
- * https://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.store.frank.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -22,7 +7,6 @@ import com.store.frank.config.base.ConfigBuilder;
 import com.store.frank.config.base.GlobalConfig;
 import com.store.frank.config.base.TemplateConfig;
 import com.store.frank.config.po.TableInfo;
-import com.store.frank.config.rule.FileType;
 import com.store.frank.utils.ConstVal;
 import com.store.frank.utils.StringTools;
 import org.slf4j.Logger;
@@ -74,8 +58,7 @@ public abstract class AbstractTemplateEngine {
                 String entityName = tableInfo.getEntityName();
                 if (null != entityName && null != pathInfo.get(ConstVal.ENTITY_PATH)) {
                     String entityFile = String.format((pathInfo.get(ConstVal.ENTITY_PATH) + File.separator + "%s" + suffixJavaOrKt()), entityName);
-                    boolean flag=isCreate(FileType.ENTITY, entityFile);
-                    if (flag) {
+                    if (isCreate(entityFile)) {
                         filePath=templateFilePath(template.getEntity());
                         writer(objectMap, filePath, entityFile);
                     }
@@ -83,7 +66,7 @@ public abstract class AbstractTemplateEngine {
                 // MpMapper.java
                 if (null != tableInfo.getMapperName() && null != pathInfo.get(ConstVal.MAPPER_PATH)) {
                     String mapperFile = String.format((pathInfo.get(ConstVal.MAPPER_PATH) + File.separator + tableInfo.getMapperName() + suffixJavaOrKt()), entityName);
-                    if (isCreate(FileType.MAPPER, mapperFile)) {
+                    if (isCreate(mapperFile)) {
                         writer(objectMap, templateFilePath(template.getMapper()), mapperFile);
                     }
                 }
@@ -91,7 +74,7 @@ public abstract class AbstractTemplateEngine {
                 if (null != tableInfo.getXmlName() && null != pathInfo.get(ConstVal.XML_PATH)) {
                     String temp=pathInfo.get(ConstVal.XML_PATH) + File.separator + tableInfo.getXmlName() + ConstVal.XML_SUFFIX;
                     String xmlFile = String.format(temp, entityName);
-                    if (isCreate(FileType.XML, xmlFile)) {
+                    if (isCreate(xmlFile)) {
                         String templateFilePath=templateFilePath(template.getXml());
                         writer(objectMap, templateFilePath, xmlFile);
                     }
@@ -99,21 +82,21 @@ public abstract class AbstractTemplateEngine {
                 // IMpService.java
                 if (null != tableInfo.getServiceName() && null != pathInfo.get(ConstVal.SERVICE_PATH)) {
                     String serviceFile = String.format((pathInfo.get(ConstVal.SERVICE_PATH) + File.separator + tableInfo.getServiceName() + suffixJavaOrKt()), entityName);
-                    if (isCreate(FileType.SERVICE, serviceFile)) {
+                    if (isCreate(serviceFile)) {
                         writer(objectMap, templateFilePath(template.getService()), serviceFile);
                     }
                 }
                 // MpServiceImpl.java
                 if (null != tableInfo.getServiceImplName() && null != pathInfo.get(ConstVal.SERVICE_IMPL_PATH)) {
                     String implFile = String.format((pathInfo.get(ConstVal.SERVICE_IMPL_PATH) + File.separator + tableInfo.getServiceImplName() + suffixJavaOrKt()), entityName);
-                    if (isCreate(FileType.SERVICE_IMPL, implFile)) {
+                    if (isCreate(implFile)) {
                         writer(objectMap, templateFilePath(template.getServiceImpl()), implFile);
                     }
                 }
                 // MpController.java
                 if (null != tableInfo.getControllerName() && null != pathInfo.get(ConstVal.CONTROLLER_PATH)) {
                     String controllerFile = String.format((pathInfo.get(ConstVal.CONTROLLER_PATH) + File.separator + tableInfo.getControllerName() + suffixJavaOrKt()), entityName);
-                    if (isCreate(FileType.CONTROLLER, controllerFile)) {
+                    if (isCreate(controllerFile)) {
                         writer(objectMap, templateFilePath(template.getController()), controllerFile);
                     }
                 }
@@ -168,12 +151,11 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("package", config.getPackageInfo());
         GlobalConfig globalConfig = config.getGlobalConfig();
         objectMap.put("author", globalConfig.getAuthor());
-        objectMap.put("swagger2", globalConfig.isSwagger2());
         objectMap.put("date", new SimpleDateFormat("yyyy-MM-dd hh:MM:ss").format(new Date()));
         objectMap.put("table", tableInfo);
+        objectMap.put("enableCache", globalConfig.isEnableCache());
         objectMap.put("tableName", tableInfo.getName());
         objectMap.put("tableFieldSize", tableInfo.getFields().size()-1);
-        objectMap.put("enableCache", globalConfig.isEnableCache());
         objectMap.put("baseColumnList", globalConfig.isBaseColumnList());
         objectMap.put("entity", tableInfo.getEntityName());
         objectMap.put("entityInstanceName", StringTools.getInstanceName(tableInfo.getEntityName())); // 实体实例化名称 首字母小写
@@ -215,17 +197,21 @@ public abstract class AbstractTemplateEngine {
 
     /**
      * 检测文件是否存在
-     *
      * @return 文件是否存在
      */
-    protected boolean isCreate(FileType fileType, String filePath) {
-        // 全局判断【默认】
+    protected boolean isCreate(String filePath) {
+        boolean flag=getConfigBuilder().getGlobalConfig().isFileOverride();
         File file = new File(filePath);
-        boolean exist = file.exists();
-        if (!exist) {
+        if(flag){ // true 需要覆盖原来的文件
             PackageHelper.mkDir(file.getParentFile());
+            return flag;
+        }else{
+            boolean exist = file.exists();
+            if (!exist) {
+                PackageHelper.mkDir(file.getParentFile());
+            }
+            return !flag;
         }
-        return !exist || getConfigBuilder().getGlobalConfig().isFileOverride();
     }
 
     /**
